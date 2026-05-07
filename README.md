@@ -18,16 +18,17 @@ Install using r2modman. In game, open the TODO_PackTitle menu and configure this
 
 ## Development
 
-This template targets the current adamant Lib/Framework contract:
+This template targets the adamant Lib/Framework module contract:
 
-- `main.lua` owns `config`, `dataDefaults`, local `store/session`, and host creation
+- `main.lua` owns `config`, local `store/session`, and host creation
 - module pieces are imported from `init()` after `modutil.once_loaded.game(...)`
-- definitions are prepared with `lib.prepareDefinition(internal, dataDefaults, { ... })`
-- storage is required and should be returned by `internal.BuildStorage()`
+- definitions are prepared with `lib.prepareDefinition(internal, { ... })`
+- custom storage should be returned by `internal.BuildStorage()`; modules with no custom settings may omit storage
+- storage defaults live in `definition.storage`; `config.lua` can stay empty
 - hash layout hints use `hashGroupPlan`, usually returned by `internal.BuildHashGroupPlan()`
 - stores are created with `local store, session = lib.createStore(config, definition)`
 - hosts are created with `lib.createModuleHost(...)`; Lib publishes the live host internally
-- standalone mode uses `lib.standaloneHost()` with no arguments
+- standalone mode uses `lib.standaloneHost(PLUGIN_GUID)`
 - module UI is written in `internal.DrawTab(ui, session)`
 - optional quick UI is written in `internal.DrawQuickContent(ui, session)`
 - modules that change run data declare `affectsRunData = true`
@@ -58,14 +59,11 @@ Canonical docs:
 - [ModpackLib HOT_RELOAD_ARCHITECTURE.md](https://github.com/h2-modpack/adamant-ModpackLib/blob/main/docs/HOT_RELOAD_ARCHITECTURE.md)
 - [ModpackLib KNOWN_LIMITATIONS.md](https://github.com/h2-modpack/adamant-ModpackLib/blob/main/docs/KNOWN_LIMITATIONS.md)
 
-Important:
+Module contract notes:
 
-- `public.host` is no longer part of the module contract
-- `definition.hashGroups` has been replaced by `hashGroupPlan`
-- `lib.standaloneHost(...)` takes no arguments
-- `definition.options`, `definition.stateSchema`, `definition.ui`, `definition.customTypes`, and `definition.selectQuickUi` are legacy and unsupported
-- coordinated modules should declare `modpack`, `id`, `name`, and `storage`
-- the current framework contract is one tab per module
+- `lib.standaloneHost(...)` requires the same plugin guid passed to `lib.createModuleHost(...)`
+- coordinated modules should declare `modpack`, `id`, and `name`; Lib injects `Enabled` and `DebugMode`
+- Framework renders one tab per module
 
 ## Local Setup
 

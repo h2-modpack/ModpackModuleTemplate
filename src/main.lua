@@ -19,11 +19,11 @@ local reload = mods["SGG_Modding-ReLoad"]
 ---@type AdamantModpackLib
 lib = mods["adamant-ModpackLib"]
 
-local dataDefaults = import("config.lua")
 local config = chalk.auto("config.lua")
 
 local PACK_ID = error("TODO: set PACK_ID to your pack id")
 local MODULE_ID = "TODO_ModuleId"
+local PLUGIN_GUID = _PLUGIN.guid
 
 ---@class TemplateModuleInternal
 ---@field PACK_ID string|nil
@@ -67,7 +67,7 @@ local function init()
     import("logic.lua")
     import("ui.lua")
 
-    local definition = lib.prepareDefinition(internal, dataDefaults, {
+    local definition = lib.prepareDefinition(internal, {
         modpack = PACK_ID,
         id = MODULE_ID,
         name = "TODO Module Name",
@@ -83,6 +83,7 @@ local function init()
     internal.store = store
 
     lib.createModuleHost({
+        pluginGuid = PLUGIN_GUID,
         definition = definition,
         store = store,
         session = session,
@@ -91,7 +92,7 @@ local function init()
         drawTab = internal.DrawTab,
         drawQuickContent = internal.DrawQuickContent,
     })
-    internal.standaloneUi = lib.standaloneHost()
+    internal.standaloneUi = lib.standaloneHost(PLUGIN_GUID)
 end
 
 local loader = reload.auto_single()

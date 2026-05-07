@@ -15,9 +15,9 @@ internal.MODE_VALUES = { "Vanilla", "Chaos", "Custom" }
 
 function internal.BuildStorage()
     return {
-        { type = "bool", alias = "FeatureEnabled", configKey = "FeatureEnabled" },
-        { type = "string", alias = "Mode", configKey = "Mode", maxLen = 32 },
-        { type = "string", alias = "FilterText", lifetime = "transient", default = "", maxLen = 64 },
+        { type = "bool", alias = "FeatureEnabled", default = false },
+        { type = "string", alias = "Mode", default = "Vanilla", maxLen = 32 },
+        { type = "string", alias = "FilterText", persist = false, hash = false, default = "", maxLen = 64 },
     }
 end
 
