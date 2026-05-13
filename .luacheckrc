@@ -1,4 +1,4 @@
-std = "lua52"
+﻿std = "lua52"
 max_line_length = 120
 globals = {
     "rom",
@@ -9,7 +9,7 @@ globals = {
     "chalk",
     "reload",
     "_PLUGIN",
-    "TemplateModule_Internal"
+    "MODULE_ANCHOR"
 }
 read_globals = {
     "imgui",

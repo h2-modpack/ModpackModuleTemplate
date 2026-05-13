@@ -1,4 +1,4 @@
--- =============================================================================
+﻿-- =============================================================================
 -- DATA / STORAGE
 -- =============================================================================
 -- This file is imported from main.lua inside init(), after once_loaded.game has fired.
@@ -7,13 +7,12 @@
 -- - hash group plans
 -- - static option lists
 -- - lookup tables derived from game data after game script import
--- luacheck: globals TemplateModule_Internal
 
-local internal = TemplateModule_Internal
+local data = {}
 
-internal.MODE_VALUES = { "Vanilla", "Chaos", "Custom" }
+data.MODE_VALUES = { "Vanilla", "Chaos", "Custom" }
 
-function internal.BuildStorage()
+function data.buildStorage()
     return {
         { type = "bool", alias = "FeatureEnabled", default = false },
         { type = "string", alias = "Mode", default = "Vanilla", maxLen = 32 },
@@ -21,7 +20,7 @@ function internal.BuildStorage()
     }
 end
 
-function internal.BuildHashGroupPlan()
+function data.buildHashGroupPlan()
     return {
         {
             key = "main",
@@ -31,4 +30,4 @@ function internal.BuildHashGroupPlan()
     }
 end
 
-return internal
+return data
