@@ -1,20 +1,20 @@
-﻿# TODO_ModName
+# SCAFFOLD_TODO_ModName
 
-> TODO: Short description of what this mod does.
+> SCAFFOLD_TODO: Short description of what this mod does.
 
-Part of the [TODO_PackTitle modpack](TODO_ShellUrl).
+Part of the [SCAFFOLD_TODO_PackTitle modpack](SCAFFOLD_TODO_ShellUrl).
 
 ## What It Does
 
-TODO: Explain what this module lets players control.
+SCAFFOLD_TODO: Explain what this module lets players control.
 
 ## Gameplay Impact
 
-TODO: Explain how this module changes a run when enabled.
+SCAFFOLD_TODO: Explain how this module changes a run when enabled.
 
 ## How To Use
 
-Install using r2modman. In game, open the TODO_PackTitle menu and configure this module from the shared settings window.
+Install using r2modman. In game, open the SCAFFOLD_TODO_PackTitle menu and configure this module from the shared settings window.
 
 ## Development
 

@@ -2,7 +2,7 @@
 -- ADAMANT MODULE TEMPLATE
 -- =============================================================================
 -- Copy this file as src/main.lua in a new module repo.
--- Fill in the TODO sections below.
+-- Fill in the SCAFFOLD_TODO sections below.
 -- luacheck: globals rom import_as_fallback MODULE_ANCHOR modutil lib _PLUGIN game
 
 local mods = rom.mods
@@ -21,8 +21,8 @@ lib = mods["adamant-ModpackLib"]
 
 local config = chalk.auto("config.lua")
 
-local PACK_ID = error("TODO: set PACK_ID to your pack id")
-local MODULE_ID = "TODO_ModuleId"
+local PACK_ID = error("SCAFFOLD_TODO: set PACK_ID to your pack id")
+local MODULE_ID = "SCAFFOLD_TODO_ModuleId"
 local PLUGIN_GUID = _PLUGIN.guid
 
 ---@class TemplateModuleAnchor
@@ -61,9 +61,9 @@ local function init()
         definition = {
             modpack = PACK_ID,
             id = MODULE_ID,
-            name = "TODO Module Name",
-            shortName = "TODO",
-            tooltip = "TODO tooltip",
+            name = "SCAFFOLD_TODO Module Name",
+            shortName = "SCAFFOLD_TODO_SHORT",
+            tooltip = "SCAFFOLD_TODO tooltip",
             storage = data.buildStorage(),
             hashGroupPlan = data.buildHashGroupPlan(),
         },
