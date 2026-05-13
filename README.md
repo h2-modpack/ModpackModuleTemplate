@@ -24,8 +24,8 @@ This template targets the adamant Lib/Framework module contract:
 - module pieces are imported from `init()` after `modutil.once_loaded.game(...)`
 - data objects are returned directly from `mods/data.lua`
 - logic/UI modules receive dependencies through explicit `.bind(...)` or `.create(...)` calls
-- modules are constructed with `lib.createModule({ ... })`
-- `host.activate()` publishes the live host and runs hooks/integrations/lifecycle side effects
+- modules are constructed with `lib.tryCreateModule({ ... })`
+- `host.tryActivate()` publishes the live host and runs hooks/integrations/lifecycle side effects
 - custom storage should be returned by `data.buildStorage()`; modules with no custom settings may omit storage
 - storage defaults live in `definition.storage`; `config.lua` can stay empty
 - hash layout hints use `hashGroupPlan`, usually returned by `data.buildHashGroupPlan()`
@@ -62,7 +62,8 @@ Canonical docs:
 
 Module contract notes:
 
-- `lib.standaloneHost(...)` requires the same plugin guid passed to `lib.createModule(...)`
+- `lib.standaloneHost(...)` requires the same plugin guid passed to `lib.tryCreateModule(...)`
+- `lib.tryCreateModule(...)` and `host.tryActivate()` let invalid modules log and skip without taking down sibling modules
 - coordinated modules should declare `modpack`, `id`, and `name`; Lib injects `Enabled` and `DebugMode`
 - Framework renders one tab per module
 

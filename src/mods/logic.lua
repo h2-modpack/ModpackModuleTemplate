@@ -29,7 +29,7 @@ end
 function logic.buildPatchPlan(_, _, _) end
 
 function logic.registerHooks(host, store) -- luacheck: ignore host store
-    -- Register hooks here if needed. host.activate() owns refresh/deactivation.
+    -- Register hooks here if needed. host activation owns refresh/deactivation.
     -- Example:
     -- lib.hooks.Wrap("FunctionName", function(baseFunc, ...)
     --     if not host.isEnabled() or not store.read("FeatureEnabled") then
