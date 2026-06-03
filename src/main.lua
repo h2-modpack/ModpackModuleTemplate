@@ -1,9 +1,9 @@
-﻿-- =============================================================================
+-- =============================================================================
 -- ADAMANT MODULE TEMPLATE
 -- =============================================================================
 -- Copy this file as src/main.lua in a new module repo.
 -- Fill in the SCAFFOLD_TODO sections below.
--- luacheck: globals rom import_as_fallback MODULE_ANCHOR modutil lib _PLUGIN game
+-- luacheck: globals rom import_as_fallback modutil lib _PLUGIN game
 
 local mods = rom.mods
 mods["SGG_Modding-ENVY"].auto()
@@ -25,28 +25,6 @@ local PACK_ID = error("SCAFFOLD_TODO: set PACK_ID to your pack id")
 local MODULE_ID = "SCAFFOLD_TODO_ModuleId"
 local PLUGIN_GUID = _PLUGIN.guid
 
----@class TemplateModuleAnchor
----@field standaloneUi StandaloneRuntime|nil
-MODULE_ANCHOR = MODULE_ANCHOR or {}
----@type TemplateModuleAnchor
-local moduleAnchor = MODULE_ANCHOR
-
-moduleAnchor.standaloneUi = nil
-
-local function registerGui()
-    rom.gui.add_imgui(function()
-        if moduleAnchor.standaloneUi and moduleAnchor.standaloneUi.renderWindow then
-            moduleAnchor.standaloneUi.renderWindow()
-        end
-    end)
-
-    rom.gui.add_to_menu_bar(function()
-        if moduleAnchor.standaloneUi and moduleAnchor.standaloneUi.addMenuBar then
-            moduleAnchor.standaloneUi.addMenuBar()
-        end
-    end)
-end
-
 local function init()
     import_as_fallback(rom.game)
 
@@ -54,38 +32,37 @@ local function init()
     local logic = import("mods/logic.lua").bind(data)
     local ui = import("mods/ui.lua").bind(data)
 
-    local host = lib.tryCreateModule({
-        owner = moduleAnchor,
+    local module = lib.createModule({
         pluginGuid = PLUGIN_GUID,
         config = config,
-        definition = {
-            modpack = PACK_ID,
-            id = MODULE_ID,
-            name = "SCAFFOLD_TODO Module Name",
-            shortName = "SCAFFOLD_TODO_SHORT",
-            tooltip = "SCAFFOLD_TODO tooltip",
-            storage = data.buildStorage(),
-            hashGroupPlan = data.buildHashGroupPlan(),
-        },
-        registerPatchMutation = logic.buildPatchPlan,
-        registerHooks = logic.registerHooks,
-        drawTab = ui.drawTab,
-        drawQuickContent = ui.drawQuickContent,
+        modpack = PACK_ID,
+        id = MODULE_ID,
+        name = "SCAFFOLD_TODO Module Name",
+        shortName = "SCAFFOLD_TODO_SHORT",
+        tooltip = "SCAFFOLD_TODO tooltip",
     })
-    if not host then
+    if not module then
         return
     end
 
-    local ok = host.tryActivate()
+    module.data.define(data.buildStorage())
+    module.ui.tab(ui.drawTab)
+    module.ui.quickContent(ui.drawQuickContent)
+    module.fallbackUi.attachGuiOnce(function(fallbackUi)
+        rom.gui.add_imgui(fallbackUi.renderWindow)
+        rom.gui.add_to_menu_bar(fallbackUi.addMenuBar)
+    end)
+
+    logic.attach(module)
+
+    local ok = module.activate()
     if not ok then
         return
     end
-
-    moduleAnchor.standaloneUi = lib.standaloneHost(PLUGIN_GUID)
 end
 
 local loader = reload.auto_single()
 
 modutil.once_loaded.game(function()
-    loader.load(registerGui, init)
+    loader.load(nil, init)
 end)

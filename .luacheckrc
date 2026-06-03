@@ -8,8 +8,7 @@ globals = {
     "game",
     "chalk",
     "reload",
-    "_PLUGIN",
-    "MODULE_ANCHOR"
+    "_PLUGIN"
 }
 read_globals = {
     "imgui",

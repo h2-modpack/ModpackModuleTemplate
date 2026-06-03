@@ -1,4 +1,4 @@
-﻿-- =============================================================================
+-- =============================================================================
 -- UI
 -- =============================================================================
 -- This file is imported from main.lua inside init().
@@ -7,43 +7,63 @@
 -- If the UI grows, keep this file as the public UI loader/router and split sections
 -- into files under src/mods/ui/. Those files should expose bind/create functions
 -- and return their own narrow draw surfaces.
--- luacheck: globals lib
 
 local ui = {}
-local data
+local quickModeOpts
+local resetQuickOpts = {
+    confirmLabel = "Confirm Reset",
+}
+local logModeOpts = {
+    id = "template_log_mode",
+}
+local featureEnabledOpts = {
+    label = "Enable Feature",
+    tooltip = "Turns the feature on for this module.",
+}
+local modeOpts
+local filterTextOpts = {
+    label = "Filter",
+    controlWidth = 180,
+}
 
 function ui.bind(deps)
-    data = deps
+    quickModeOpts = {
+        label = "Mode",
+        values = deps.MODE_VALUES,
+        controlWidth = 140,
+    }
+    modeOpts = {
+        label = "Mode",
+        values = deps.MODE_VALUES,
+        controlWidth = 180,
+    }
     return ui
 end
 
-function ui.drawQuickContent(imgui, session)
-    lib.widgets.dropdown(imgui, session, "Mode", {
-        label = "Mode",
-        values = data.MODE_VALUES,
-        controlWidth = 140,
-    })
+function ui.drawQuickContent(_, ctx)
+    local draw = ctx.draw
+    local state = ctx.data
+
+    draw.widgets.dropdown(state.get("Mode"), quickModeOpts)
+
+    if draw.widgets.confirmButton("template_quick_reset_all", "Reset", resetQuickOpts) then
+        ctx.resetAll()
+    end
+
+    logModeOpts.action = ctx.actions.get("LogMode")
+    draw.widgets.button("Log Mode", logModeOpts)
 end
 
-function ui.drawTab(imgui, session)
-    lib.widgets.checkbox(imgui, session, "FeatureEnabled", {
-        label = "Enable Feature",
-        tooltip = "Turns the feature on for this module.",
-    })
+function ui.drawTab(_, ctx)
+    local draw = ctx.draw
+    local state = ctx.data
 
-    lib.widgets.dropdown(imgui, session, "Mode", {
-        label = "Mode",
-        values = data.MODE_VALUES,
-        controlWidth = 180,
-    })
+    draw.widgets.checkbox(state.get("FeatureEnabled"), featureEnabledOpts)
+    draw.widgets.dropdown(state.get("Mode"), modeOpts)
+    draw.widgets.inputText(state.get("FilterText"), filterTextOpts)
 
-    lib.widgets.inputText(imgui, session, "FilterText", {
-        label = "Filter",
-        controlWidth = 180,
-    })
-
-    imgui.Separator()
-    imgui.Text("Start here: replace this with your real module UI.")
+    draw.widgets.separator()
+    draw.widgets.text("Start here: replace this with your real module UI.")
 end
 
 return ui
