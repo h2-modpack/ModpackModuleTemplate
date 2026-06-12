@@ -18,16 +18,16 @@ Install using r2modman. In game, open the SCAFFOLD_TODO_PackTitle menu and confi
 
 ## Development
 
-This template targets the adamant Lib/Framework module contract:
+This template targets the current adamant ModpackLib module contract:
 
-- `main.lua` owns `config`, module creation, capability declaration, fallback UI attachment, and activation
+- `main.lua` owns module creation, capability declaration, fallback UI attachment, and activation
 - module pieces are imported from `init()` after `modutil.once_loaded.game(...)`
 - data objects are returned directly from `mods/data.lua`
 - logic/UI modules receive dependencies through explicit `.bind(...)` or `.create(...)` calls
 - modules are constructed with `lib.createModule({ ... })`
 - `module.activate()` publishes the live host and runs hooks/lifecycle side effects
 - custom storage should be returned by `data.buildStorage()`; modules with no custom settings may omit storage
-- storage defaults live in `module.data.define(...)`; `config.lua` can stay empty
+- storage defaults live in `module.data.define(...)`; Lib owns module persistence
 - optional draw actions are declared with `module.actions.define(...)` and staged from widgets through `ui.actions.get(...)`
 - fallback module UI uses `module.fallbackUi.attachGuiOnce(...)`
 - module UI is written as callbacks that receive `(host, ui)` and use `ui.draw`, `ui.data`, and `ui.actions`
@@ -63,10 +63,18 @@ Module contract notes:
 - `lib.createModule(...)` requires the module plugin guid through `pluginGuid`
 - `lib.createModule(...)` and `module.activate()` let invalid modules log and skip without taking down sibling modules
 - coordinated modules should declare `modpack`, `id`, and `name`; Lib injects `Enabled` and `DebugMode`
-- Framework renders one tab per coordinated module
+- Lib modpack renders one tab per coordinated module
 
 ## Local Setup
 
-1. Clone this repo
-2. Run `Setup/init_repo.bat` or `Setup/init_repo.sh`
-3. Run `Setup/deploy_local.bat` or `Setup/deploy_local.sh`
+Prefer creating modules through the shell repo:
+
+```bash
+ModpackTools/run ModpackTools/new_module/create.py --package-id SCAFFOLD_TODO_ModName --title "SCAFFOLD_TODO Module Name"
+```
+
+For local deploys, run the shell repo deploy entrypoint:
+
+```bash
+ModpackTools/run ModpackTools/local_deploy/deploy_all.py --overwrite
+```
