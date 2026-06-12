@@ -60,14 +60,21 @@ jobs:
         run: |
           luacheck src/
           find src -type f -name '*.lua' -print0 | xargs -0 -r -n1 luac -p
+          if [ -d tests ]; then
+            find tests -type f -name '*.lua' -print0 | xargs -0 -r -n1 luac -p
+          fi
 
       - name: Install LuaUnit
-        if: ${{ hashFiles('tests/all.lua') != '' }}
+        if: ${{ hashFiles('tests/all.lua') != '' || hashFiles('tests/integration.lua') != '' }}
         run: luarocks install luaunit
 
       - name: Run tests
         if: ${{ hashFiles('tests/all.lua') != '' }}
         run: lua tests/all.lua
+
+      - name: Run integration tests
+        if: ${{ hashFiles('tests/integration.lua') != '' }}
+        run: lua tests/integration.lua
 
       - name: Prepare release files
         run: python .modpacktools/github/prepare_package_release.py --tag '${{ inputs.tag }}' --allow-empty --release-notes-output .release-notes.md
